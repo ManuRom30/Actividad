@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: svc-drupal
+  labels:
+    app: actividad-drupal
+
+spec:
+  type: LoadBalancer
+  selector:
+    microservices: drupal
+
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: drupal-app
+  labels:
+    app: actividad-drupal
+    version: v1
+
+spec:
+  selector:
+    matchLabels:
+      microservices: drupal
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: actividad-drupal
+        microservices: drupal
+        version: v1
+    spec:
+      containers:
+        - name: drupal
+          image: drupal:10-apache
+          ports:
+           - containerPort: 80
+          volumeMounts:
+            - name: drupal-volume
+              mountPath: /var/www/html
+      volumes:
+        - name: drupal-volume
+          persistentVolumeClaim:
+            claimName: pvc-drupal        

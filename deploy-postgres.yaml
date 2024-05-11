@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: svc-postgres
+  labels:
+    app: actividad-postgres
+
+spec:
+  type: ClusterIP
+  selector:
+    microservices: postgres
+
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: postgress-app
+  labels:
+    app: actividad-postgres
+    version: v1
+
+spec:
+  selector:
+    matchLabels:
+      microservices: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: actividad-postgres
+        microservices: postgres
+        version: v1
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16
+          ports:
+           - containerPort: 5432
+          env:
+           - name: POSTGRES_DB
+             value: pruebadb
+           - name: POSTGRES_USER
+             value: manuel
+           - name: POSTGRES_PASSWORD
+             value: rome1230
+          volumeMounts:
+            - name: postgres-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-volume
+          persistentVolumeClaim:
+            claimName: pvc-postgres
