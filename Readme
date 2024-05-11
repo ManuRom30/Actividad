@@ -1,0 +1,11 @@
+# Actividad-3-Kubernetes
+Con motivo de la actividad 3 para el botcamp se procede a desplegar aplicativo drupal en su versión 10-apache en conjunto con una base de datos Postgres versión 16, cara uno con sus volúmenes con capacidad de 10Gi 
+
+Para el uso de la aplicación se crea desde el deploy un acceso por localhost, no es necesario especificar puerto de ingreso. 
+En la configuración del base de datos se debe ingresar los siguiente datos 
+
+Nombre de la base de datos: pruebadb
+Usuario: manuel
+contraseña: rome1230
+
+### servidor: se debe tomar la ip interna del servicio que se levanto para la base de datos
